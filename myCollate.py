@@ -78,8 +78,8 @@ class BetterBaseCollateFunction(nn.Module):
         fnames = [item[2] for item in batch]
 
         # Original images
-        make_tensor = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),])
-        originals = [make_tensor(item[0]) for item in batch]
+        # make_tensor = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),])
+        originals = [item[0] for item in batch]
 
         # tuple of transforms
         transforms = (
