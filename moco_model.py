@@ -6,7 +6,7 @@ import numpy as np
 import copy
 
 class MocoModel(pl.LightningModule):
-    def __init__(self, memory_bank_size, moco_max_epochs, downstream_max_epochs=0, dataloader_train_classifier=None, dataloader_test=None, downstream_test_every=0):
+    def __init__(self, memory_bank_size, moco_max_epochs, downstream_max_epochs=0, dataloader_train_classifier=None, dataloader_test=None, downstream_test_every=0, last_epoch=-1):
         super().__init__()
 
         self.moco_max_epochs = moco_max_epochs
@@ -14,6 +14,7 @@ class MocoModel(pl.LightningModule):
         self.dataloader_train_classifier = dataloader_train_classifier
         self.dataloader_test = dataloader_test
         self.downstream_test_every = downstream_test_every
+        self.last_epoch=-1
 
         # create a ResNet backbone and remove the classification head
         resnet = lightly.models.ResNetGenerator('resnet-18', 1, num_splits=8)
@@ -77,7 +78,7 @@ class MocoModel(pl.LightningModule):
     def configure_optimizers(self):
         optim = torch.optim.SGD(self.resnet_moco.parameters(), lr=6e-2,
                                 momentum=0.9, weight_decay=5e-4)
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optim, 3000) # self.moco_max_epochs TODO: CHANGE BACC
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optim, self.moco_max_epochs, last_epoch=self.last_epoch) 
         return [optim], [scheduler]
 
 
