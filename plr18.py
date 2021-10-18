@@ -1,6 +1,9 @@
 from pytorch_lightning.core.lightning import LightningModule
+import torch
 from torchvision.models import resnet18
 import torch.nn as nn
+import torch.optim as optim
+import torchmetrics
 
 
 n_classes = 10

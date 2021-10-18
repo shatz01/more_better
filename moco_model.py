@@ -71,7 +71,7 @@ class MocoModel(pl.LightningModule):
 
     def training_epoch_end(self, outputs):
         self.custom_histogram_weights()
-        if self.current_epoch%self.downstream_test_every == 0:
+        if self.current_epoch%self.downstream_test_every == 0 and self.current_epoch>2500:
             print('... training downstream classifier...')
             self.test_downstream_training()
 
