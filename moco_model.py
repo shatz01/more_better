@@ -108,9 +108,9 @@ class Classifier(pl.LightningModule):
         self.accuracy = pl.metrics.Accuracy()
 
     def forward(self, x):
-        with torch.no_grad():
-            y_hat = self.resnet_moco.backbone(x).squeeze()
-            y_hat = nn.functional.normalize(y_hat, dim=1)
+        y_hat = self.resnet_moco.backbone(x).squeeze()
+        y_hat = y_hat.unsqueeze(0)
+        y_hat = nn.functional.normalize(y_hat, dim=1)
         y_hat = self.fc(y_hat)
         return y_hat
 

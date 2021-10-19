@@ -200,9 +200,12 @@ class ReverseMocoModel(pl.LightningModule):
 
         backbone = nn.Sequential(
             *list(resnet.children())[:-2],
-            nn.Linear(512, 1024),
+            nn.AvgPool2d(4),
+            nn.Flatten(),
+            nn.Linear(512, 512),
             nn.ReLU(),
-            nn.Linear(1024, 512),
+            nn.Linear(512, 512),
+            nn.Unflatten(1,(512, 1, 1)),
             nn.AdaptiveAvgPool2d(1),
         )
 
